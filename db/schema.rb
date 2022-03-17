@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_16_051127) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_17_044118) do
+  create_table "artists", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "attendees", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "authors", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -32,6 +45,26 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_16_051127) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "gigs", force: :cascade do |t|
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "artist_id"
+    t.index ["artist_id"], name: "index_gigs_on_artist_id"
+  end
+
+  create_table "tickets", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "gig_id"
+    t.integer "attendee_id"
+    t.index ["attendee_id"], name: "index_tickets_on_attendee_id"
+    t.index ["gig_id"], name: "index_tickets_on_gig_id"
+  end
+
   add_foreign_key "authors_books", "authors"
   add_foreign_key "authors_books", "books"
+  add_foreign_key "gigs", "artists"
+  add_foreign_key "tickets", "attendees"
+  add_foreign_key "tickets", "gigs"
 end
